@@ -60,16 +60,16 @@ document.addEventListener('DOMContentLoaded', function () {
         const c = Number(data.rating3) || 0;
         const avg = Number(((a + b + c) / 3).toFixed(1));
 
-        // Color rules (non-overlapping):
-        // 0.0 <= avg < 4.0 -> red
-        // 4.0 <= avg < 7.0 -> orange
-        // 7.0 <= avg <= 10.0 -> green
-        let color = 'black';
-        if (Number.isFinite(avg)) {
-            if (avg < 4.0) color = 'red';
-            else if (avg < 7.0) color = 'orange';
-            else color = 'green';
-        }
+		// Color rules (inclusive per spec):
+		// 0.0 <= avg <= 4.0 -> red
+		// 4.0 <  avg <  7.0 -> orange
+		// 7.0 <= avg <= 10.0 -> green
+		let color = 'black';
+		if (Number.isFinite(avg)) {
+			if (avg <= 4.0) color = 'red';
+			else if (avg < 7.0) color = 'orange';
+			else color = 'green';
+		}
 
         resultsDisplay.innerHTML = `
             <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
@@ -80,8 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <p><strong>Rating 1:</strong> ${data.rating1}</p>
             <p><strong>Rating 2:</strong> ${data.rating2}</p>
             <p><strong>Rating 3:</strong> ${data.rating3}</p>
-            <p><strong>Average Rating:</strong> <span style="color:${color}; font-weight:700;">${isNaN(avg) ? '-' : avg.toFixed(1)}</span></p>
-            <p><strong>Helper tag:</strong> ${escapeHtml(data.helperTag)}</p>
+			<p><strong>Average Rating:</strong> <span style="color:${color}; font-weight:700;">${isNaN(avg) ? '-' : avg.toFixed(1)}</span></p>
         `;
 
         resultsDiv.style.display = 'block';

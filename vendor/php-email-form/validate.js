@@ -17,7 +17,8 @@
       let action = thisForm.getAttribute('action');
       let recaptcha = thisForm.getAttribute('data-recaptcha-site-key');
       
-      if( ! action ) {
+      // Treat empty, `#` or javascript pseudo-actions as "no action"
+      if( ! action || action.trim() === '#' || action.trim().toLowerCase().startsWith('javascript:') ) {
         displayError(thisForm, 'The form action property is not set!');
         return;
       }
