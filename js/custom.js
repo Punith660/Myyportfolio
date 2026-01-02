@@ -60,30 +60,38 @@ document.addEventListener('DOMContentLoaded', function () {
         const c = Number(data.rating3) || 0;
         const avg = Number(((a + b + c) / 3).toFixed(1));
 
-		// Color rules (inclusive per spec):
-		// 0.0 <= avg <= 4.0 -> red
-		// 4.0 <  avg <  7.0 -> orange
-		// 7.0 <= avg <= 10.0 -> green
-		let color = 'black';
+		// Color rules (make 0-4 => red, 4-7 => orange, 7-10 => green)
+		// Use CSS classes so styles are consistent with the site
+		let avgClass = 'avg-neutral';
 		if (Number.isFinite(avg)) {
-			if (avg <= 4.0) color = 'red';
-			else if (avg < 7.0) color = 'orange';
-			else color = 'green';
+			if (avg <= 4.0) avgClass = 'avg-red';
+			else if (avg <= 7.0) avgClass = 'avg-orange';
+			else avgClass = 'avg-green';
 		}
 
-        resultsDisplay.innerHTML = `
-            <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
-            <p><strong>Surname:</strong> ${escapeHtml(data.surname)}</p>
-            <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
-            <p><strong>Phone number:</strong> ${escapeHtml(data.phone)}</p>
-            <p><strong>Address:</strong> ${escapeHtml(data.address)}</p>
-            <p><strong>Rating 1:</strong> ${data.rating1}</p>
-            <p><strong>Rating 2:</strong> ${data.rating2}</p>
-            <p><strong>Rating 3:</strong> ${data.rating3}</p>
-			<p><strong>Average Rating:</strong> <span style="color:${color}; font-weight:700;">${isNaN(avg) ? '-' : avg.toFixed(1)}</span></p>
-        `;
+		resultsDisplay.innerHTML = `
+			<p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+			<p><strong>Surname:</strong> ${escapeHtml(data.surname)}</p>
+			<p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
+			<p><strong>Phone number:</strong> ${escapeHtml(data.phone)}</p>
+			<p><strong>Address:</strong> ${escapeHtml(data.address)}</p>
+			<p><strong>Rating 1:</strong> ${data.rating1}</p>
+			<p><strong>Rating 2:</strong> ${data.rating2}</p>
+			<p><strong>Rating 3:</strong> ${data.rating3}</p>
+			<p><strong>Helper tag:</strong> ${escapeHtml(data.helperTag)}</p>
+		`;
 
-        resultsDiv.style.display = 'block';
+		// Show results block
+		resultsDiv.style.display = 'block';
+
+		// Update the small average display next to the submit button
+		const avgSlot = document.getElementById('avgDisplay');
+		if (avgSlot) {
+			avgSlot.innerHTML = `
+				<strong style="margin-right:6px;">Average:</strong>
+				<span class="avg-value ${avgClass}">${isNaN(avg) ? '-' : avg.toFixed(1)}</span>
+			`;
+		}
     }
 
     // Simple popup
